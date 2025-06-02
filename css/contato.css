@@ -1,0 +1,36 @@
+.contato-container {
+    max-width: 600px;
+    margin: 60px auto;
+    padding: 20px;
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  }
+  
+  form {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  form label {
+    margin: 12px 0 4px 0;
+    font-weight: bold;
+  }
+  
+  form input, form textarea {
+    padding: 10px;
+    border: 2px solid #ccc;
+    border-radius: 6px;
+    transition: 0.3s;
+    outline: none;
+  }
+  
+  form input:focus, form textarea:focus {
+    border-color: #00A86B;
+    box-shadow: 0 0 6px rgba(0,168,107,0.4);
+  }
+  
+  form button {
+    margin-top: 20px;
+  }
+  

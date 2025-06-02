@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Empresas | Light Water Shares</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/empresas.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    .section {
+      padding: 40px 20px;
+      text-align: center;
+      background-color: #ffffff;
+      margin: 20px auto;
+      max-width: 900px;
+      border-radius: 10px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    }
+
+    .card {
+      padding: 20px;
+    }
+
+    .chart-container {
+      background-color: #fff;
+      padding: 30px;
+      border-radius: 12px;
+      height: 500px;
+    }
+
+    .chart-container canvas {
+      height: 100% !important;
+      width: 100% !important;
+    }
+
+    .fade-in {
+      opacity: 0;
+      animation: fadeIn 0.6s ease-in-out forwards;
+    }
+    
+    .external-link-button {
+      margin-top: 20px;
+      background-color: #00A86B;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 6px;
+      text-decoration: none;
+      display: inline-block;
+      font-weight: bold;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <header class="navbar">
+    <a href="index.html"><img src="imagens/logo_2.png" alt="Logo" class="logo"></a>
+    <nav>
+      <a href="index.html">Início</a>
+      <a href="noticias.html">Notícias</a>
+      <a href="empresas.html">Empresas</a>
+      <a href="contato.html">Contato</a>
+    </nav>
+  </header>
+
+  <section class="hero">
+    <h2>Empresas em Destaque</h2>
+    <p>Conheça as principais empresas do setor de Energias Renováveis.</p>
+  </section>
+
+  <section class="empresas-container" id="lista-empresas">
+    <div class="empresa fade-in">
+      <img src="imagens/logo-aeris.png" alt="Aeris">
+      <div>
+        <h3>Aeris</h3>
+        <p>A Aeris é um fabricante de pás eólicas brasileira que atua em uma localização estratégica, combinando
+          facilidades "state-of-the-art" e processos eficazes através de profissionais treinados para desenvolver
+          produtos de alta qualidade.</p>
+        <a href="empresas.html?id=aeris" class="button-green">Ver Mais</a>
+      </div>
+    </div>
+    <div class="empresa fade-in">
+      <img src="imagens/logo-canadian.png" alt="CanadianSolar">
+      <div>
+        <h3>CanadianSolar</h3>
+        <p>Canadian Solar Inc. é uma empresa global de energia renovável. A empresa fabrica módulos solares
+          fotovoltaicos e desenvolve projetos solares em grande escala.</p>
+        <a href="empresas.html?id=canadian" class="button-green">Ver Mais</a>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <p>© 2025 Light Water Shares - Todos os direitos reservados.</p>
+  </footer>
+
+  <script>
+    console.log("Script carregado com sucesso");
+
+    const empresas = {
+      aeris: {
+        nome: 'Aeris',
+        descricao: 'A Aeris é um fabricante de pás eólicas brasileira que atua em uma localização estratégica.',
+        logo: 'imagens/logo-aeris-laranja.png',
+        simbolo: 'AERI3.SA',
+        tipo: 'brapi',
+        link: 'https://www.infomoney.com.br/cotacoes/b3/acao/aeris-aeri3/'
+      },
+      canadian: {
+        nome: 'Canadian Solar',
+        descricao: 'A Canadian Solar é uma empresa global de energia solar.',
+        logo: 'imagens/logo-canadian.png',
+        simbolo: 'CSIQ',
+        tipo: 'yahoo'
+      }
+    };
+
+    const id = new URLSearchParams(window.location.search).get("id");
+    console.log("ID da URL:", id);
+
+    if (id && empresas[id]) {
+      document.querySelector(".hero").style.display = "none";
+      document.getElementById("lista-empresas").style.display = "none";
+
+      const empresa = empresas[id];
+      console.log("Empresa encontrada:", empresa);
+
+      const detalhe = document.createElement("section");
+      detalhe.className = "section fade-in";
+      detalhe.innerHTML = `
+    <div id="empresa-container" class="card" style="text-align:center;">
+      <img src="${empresa.logo}" alt="${empresa.nome}" style="width:100px; margin-bottom:10px;">
+      <h2>${empresa.nome}</h2>
+      <p>${empresa.descricao}</p>
+      ${empresa.link ? `<a href="${empresa.link}" target="_blank" class="external-link-button">Ver no InfoMoney</a>` : ''}
+    </div>
+  `;
+      const footer = document.querySelector("footer");
+      if (footer) document.body.insertBefore(detalhe, footer);
+
+      const grafico = document.createElement("section");
+      grafico.className = "section chart-container fade-in";
+      grafico.innerHTML = `
+    <h2>Gráfico da Ação</h2>
+    <canvas id="graficoAcao"></canvas>
+  `;
+      if (footer) document.body.insertBefore(grafico, footer);
+
+      setTimeout(() => {
+        if (empresa.tipo === 'brapi') {
+          fetch(`https://brapi.dev/api/quote/${empresa.simbolo}?range=1mo&interval=1d&token=k7VjvCXMjP9GpcTNHfjJc3`)
+            .then(res => res.json())
+            .then(data => {
+              console.log("Dados da API Brapi:", data);
+              const valores = data.results[0].historicalDataPrice.map(p => p.close);
+              const labels = data.results[0].historicalDataPrice.map(p => new Date(p.date * 1000).toLocaleDateString('pt-BR'));
+              renderizarGrafico(labels.reverse(), valores.reverse(), empresa.simbolo);
+            })
+            .catch(err => {
+              document.getElementById('graficoAcao').outerHTML = '<p>Erro ao carregar dados da ação.</p>';
+              console.error("Erro:", err);
+            });
+
+        } else if (empresa.tipo === 'yahoo') {
+          fetch(`https://cors-anywhere.herokuapp.com/https://query1.finance.yahoo.com/v8/finance/chart/${empresa.simbolo}?range=1mo&interval=1d`)
+            .then(res => res.json())
+            .then(data => {
+              const timestamps = data.chart.result[0].timestamp;
+              const valores = data.chart.result[0].indicators.quote[0].close;
+              const labels = timestamps.map(ts => new Date(ts * 1000).toLocaleDateString('pt-BR'));
+              renderizarGrafico(labels, valores, empresa.simbolo);
+            })
+            .catch(err => {
+              document.getElementById('graficoAcao').outerHTML = '<p>Erro ao carregar dados da ação via Yahoo Finance.</p>';
+              console.error("Erro Yahoo:", err);
+            });
+        }
+      }, 200);
+    }
+
+    function renderizarGrafico(labels, dados, titulo) {
+      console.log("Renderizando gráfico com:", labels, dados);
+      new Chart(document.getElementById('graficoAcao'), {
+        type: 'line',
+        data: {
+          labels: labels,
+          datasets: [{
+            label: `Preço de ${titulo}`,
+            data: dados,
+            borderColor: '#00A86B',
+            backgroundColor: 'rgba(0,168,107,0.2)',
+            fill: true,
+            tension: 0.3
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          scales: {
+            x: { title: { display: true, text: 'Data' } },
+            y: { title: { display: true, text: 'Preço (R$ ou USD)' } }
+          }
+        }
+      });
+    }
+  </script>
+
+</body>
+
+</html>

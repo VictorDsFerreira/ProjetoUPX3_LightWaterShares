@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Light Water Shares</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="css/style.css">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+
+  <style>
+    .carousel-item img {
+      height: 600px;
+      object-fit: cover;
+    }
+
+    .carousel-caption {
+      background: rgba(0, 0, 0, 0.459);
+      padding: 1rem;
+      border-radius: 10px;
+      height: 100px;
+    }
+
+    .hero {
+      padding: 60px 20px;
+      background: linear-gradient(90deg, #009973, #004d66);
+      color: white;
+      text-align: center;
+    }
+  </style>
+</head>
+
+<body>
+
+  <header class="navbar">
+    <a href="index.html"><img src="imagens/logo_2.png" alt="Logo" class="logo"></a>
+    <nav>
+      <a href="index.html">Início</a>
+      <a href="noticias.html">Notícias</a>
+      <a href="empresas.html">Empresas</a>
+      <a href="contato.html">Contato</a>
+    </nav>
+  </header>
+
+  <div id="carouselExampleCaptions" class="carousel slide" data-bs-ride="carousel">
+    <div class="carousel-inner">
+      <div class="carousel-item active">
+        <img src="imagens/energia_solar_carrossel.png" class="d-block w-100" alt="Energia Solar">
+        <div class="carousel-caption d-none d-md-block">
+          <h5>Energia Solar em Alta</h5>
+          <p>Investimentos crescentes em painéis solares no Brasil e no mundo.</p>
+        </div>
+      </div>
+      <div class="carousel-item">
+        <img src="imagens/eolica_carrossel.jpg" class="d-block w-100" alt="Energia Eólica">
+        <div class="carousel-caption d-none d-md-block">
+          <h5>Força dos Ventos</h5>
+          <p>Energia eólica se destaca como solução limpa e eficiente.</p>
+        </div>
+      </div>
+      <div class="carousel-item">
+        <img src="imagens/usina_carrossel.jpg" class="d-block w-100" alt="Investimentos Verdes">
+        <div class="carousel-caption d-none d-md-block">
+          <h5>Investimentos Verdes</h5>
+          <p>Descubra empresas que lideram a transição energética.</p>
+        </div>
+      </div>
+    </div>
+    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="prev">
+      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+      <span class="visually-hidden">Previous</span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="next">
+      <span class="carousel-control-next-icon" aria-hidden="true"></span>
+      <span class="visually-hidden">Next</span>
+    </button>
+  </div>
+
+  <section class="hero">
+    <h2>Informação Inteligente sobre Energias Renováveis</h2>
+    <p>Conheça o futuro da energia limpa e as melhores empresas do setor.</p>
+    <a href="#" class="button-green">Explorar</a>
+  </section>
+
+  <section class="section cta-container fade-in">
+    <h2 class="text-center">O que são Energias Renováveis?</h2>
+    <div class="card mt-3 mx-auto" style="max-width: 900px;">
+      <div class="card-body">
+        <p>São fontes de energia obtidas da natureza, como o sol, o vento, a água e a biomassa. Elas se regeneram
+          naturalmente e ajudam a preservar o meio ambiente.</p>
+        <ul>
+          <li>Reduzem a emissão de gases poluentes;</li>
+          <li>São fontes inesgotáveis;</li>
+          <li>Promovem sustentabilidade econômica e ambiental.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <h2 class="mb-4">Empresas em Destaque</h2>
+    <div class="row row-cols-1 row-cols-md-3 g-4 justify-content-center">
+      <div class="col">
+        <div class="card text-white bg-transparent border-0">
+          <img src="imagens/Sonar_ic.png" class="card-img" alt="Painel Solar">
+          <div class="card-img-overlay d-flex flex-column justify-content-center text-center">
+            <h5 class="card-title fw-bold">Solar</h5>
+            <p class="card-text">Energia captada através da luz solar com painéis fotovoltaicos.</p>
+          </div>
+        </div>
+      </div>
+      <div class="col">
+        <div class="card text-white bg-transparent border-0">
+          <img src="imagens/Eolica_ic.png" class="card-img" alt="Eolica">
+          <div class="card-img-overlay d-flex flex-column justify-content-center text-center">
+            <h5 class="text-center fw-bold">Eólica</h5>
+            <p>Produzida a partir da força dos ventos com turbinas eólicas.</p>
+          </div>
+        </div>
+      </div>
+      <div class="col">
+        <div class="card text-white bg-transparent border-0">
+          <img src="imagens/hidro_ic.png" class="card-img" alt="Hidrica">
+          <div class="card-img-overlay d-flex flex-column justify-content-center text-center">
+            <h5 class="text-center fw-bold">Hídrica</h5>
+            <p>Geração de energia através de rios e quedas d'água.</p>
+          </div>
+        </div>
+      </div>
+      <div class="col">
+        <div class="card text-white bg-transparent border-0">
+          <img src="imagens/biomassa_ic.png" class="card-img" alt="biomassa">
+          <div class="card-img-overlay d-flex flex-column justify-content-center text-center">
+            <h5 class="text-center fw-bold">Biomassa</h5>
+            <p>Energia obtida da decomposição de matéria orgânica.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section cta-container fade-in">
+    <h2>Invista no Futuro</h2>
+    <p>Conheça as empresas que mais investem em energia limpa e acompanhe o mercado.</p>
+    <a href="empresas.html" class="button-green">Ver Empresas</a>
+  </section>
+
+  <footer>
+    <p>© 2025 Light Water Shares - Todos os direitos reservados.</p>
+  </footer>
+
+  <script src="scripts/animacoes.js"></script>
+</body>
+
+</html>
