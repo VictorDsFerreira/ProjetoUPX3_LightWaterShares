@@ -8,62 +8,6 @@
   <link rel="stylesheet" href="css/style.css">
   <link rel="stylesheet" href="css/empresas.css">
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <style>
-    .section {
-      padding: 40px 20px;
-      text-align: center;
-      background-color: #ffffff;
-      margin: 20px auto;
-      max-width: 900px;
-      border-radius: 10px;
-      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-    }
-
-    .card {
-      padding: 20px;
-    }
-
-    .chart-container {
-      background-color: #fff;
-      padding: 30px;
-      border-radius: 12px;
-      height: 500px;
-    }
-
-    .chart-container canvas {
-      height: 100% !important;
-      width: 100% !important;
-    }
-
-    .fade-in {
-      opacity: 0;
-      animation: fadeIn 0.6s ease-in-out forwards;
-    }
-    
-    .external-link-button {
-      margin-top: 20px;
-      background-color: #00A86B;
-      color: white;
-      border: none;
-      padding: 10px 20px;
-      border-radius: 6px;
-      text-decoration: none;
-      display: inline-block;
-      font-weight: bold;
-    }
-
-    @keyframes fadeIn {
-      from {
-        opacity: 0;
-        transform: translateY(10px);
-      }
-
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-  </style>
 </head>
 
 <body>
@@ -106,12 +50,21 @@
   </section>
 
   <footer>
-    <p>© 2025 Light Water Shares - Todos os direitos reservados.</p>
+    <div class="footer-content">
+      <div class="footer-logo">
+        <img src="imagens/logo_2.png" alt="Logo Light Water Shares" style="height: 40px; margin-bottom: 1rem;">
+      </div>
+      <div class="footer-links">
+        <a href="index.html">Início</a>
+        <a href="noticias.html">Notícias</a>
+        <a href="empresas.html">Empresas</a>
+        <a href="contato.html">Contato</a>
+      </div>
+      <p>© 2025 Light Water Shares - Todos os direitos reservados.</p>
+    </div>
   </footer>
 
   <script>
-    console.log("Script carregado com sucesso");
-
     const empresas = {
       aeris: {
         nome: 'Aeris',
@@ -126,19 +79,18 @@
         descricao: 'A Canadian Solar é uma empresa global de energia solar.',
         logo: 'imagens/logo-canadian.png',
         simbolo: 'CSIQ',
-        tipo: 'yahoo'
+        tipo: 'alpha_vantage',
+        link: 'https://finance.yahoo.com/quote/CSIQ'
       }
     };
 
     const id = new URLSearchParams(window.location.search).get("id");
-    console.log("ID da URL:", id);
 
     if (id && empresas[id]) {
       document.querySelector(".hero").style.display = "none";
       document.getElementById("lista-empresas").style.display = "none";
 
       const empresa = empresas[id];
-      console.log("Empresa encontrada:", empresa);
 
       const detalhe = document.createElement("section");
       detalhe.className = "section fade-in";
@@ -147,7 +99,7 @@
       <img src="${empresa.logo}" alt="${empresa.nome}" style="width:100px; margin-bottom:10px;">
       <h2>${empresa.nome}</h2>
       <p>${empresa.descricao}</p>
-      ${empresa.link ? `<a href="${empresa.link}" target="_blank" class="external-link-button">Ver no InfoMoney</a>` : ''}
+      ${empresa.link ? `<a href="${empresa.link}" target="_blank" class="external-link-button">Ver no Mercado</a>` : ''}
     </div>
   `;
       const footer = document.querySelector("footer");
@@ -166,7 +118,6 @@
           fetch(`https://brapi.dev/api/quote/${empresa.simbolo}?range=1mo&interval=1d&token=k7VjvCXMjP9GpcTNHfjJc3`)
             .then(res => res.json())
             .then(data => {
-              console.log("Dados da API Brapi:", data);
               const valores = data.results[0].historicalDataPrice.map(p => p.close);
               const labels = data.results[0].historicalDataPrice.map(p => new Date(p.date * 1000).toLocaleDateString('pt-BR'));
               renderizarGrafico(labels.reverse(), valores.reverse(), empresa.simbolo);
@@ -176,25 +127,29 @@
               console.error("Erro:", err);
             });
 
-        } else if (empresa.tipo === 'yahoo') {
-          fetch(`https://cors-anywhere.herokuapp.com/https://query1.finance.yahoo.com/v8/finance/chart/${empresa.simbolo}?range=1mo&interval=1d`)
+        } else if (empresa.tipo === 'alpha_vantage') {
+          fetch(`https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=${empresa.simbolo}&apikey=JXKAMVJBHZFI18WJ`)
             .then(res => res.json())
             .then(data => {
-              const timestamps = data.chart.result[0].timestamp;
-              const valores = data.chart.result[0].indicators.quote[0].close;
-              const labels = timestamps.map(ts => new Date(ts * 1000).toLocaleDateString('pt-BR'));
-              renderizarGrafico(labels, valores, empresa.simbolo);
+              if (data['Time Series (Daily)']) {
+                const timeSeriesData = data['Time Series (Daily)'];
+                const dates = Object.keys(timeSeriesData).slice(0, 30).reverse();
+                const values = dates.map(date => parseFloat(timeSeriesData[date]['4. close']));
+                const labels = dates.map(date => new Date(date).toLocaleDateString('pt-BR'));
+                renderizarGrafico(labels, values, empresa.simbolo);
+              } else {
+                throw new Error('Dados inválidos recebidos da API');
+              }
             })
             .catch(err => {
-              document.getElementById('graficoAcao').outerHTML = '<p>Erro ao carregar dados da ação via Yahoo Finance.</p>';
-              console.error("Erro Yahoo:", err);
+              document.getElementById('graficoAcao').outerHTML = '<p>Erro ao carregar dados da ação via Alpha Vantage.</p>';
+              console.error("Erro Alpha Vantage:", err);
             });
         }
       }, 200);
     }
 
     function renderizarGrafico(labels, dados, titulo) {
-      console.log("Renderizando gráfico com:", labels, dados);
       new Chart(document.getElementById('graficoAcao'), {
         type: 'line',
         data: {
